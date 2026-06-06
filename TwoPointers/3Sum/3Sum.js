@@ -2,55 +2,70 @@
  * @param {number[]} nums
  * @return {number[][]}
  */
-// This implementation sorts the array first so a two-pointer scan becomes possible.
-// The current control flow is trying to move left and right pointers around a fixed i.
-// Note: the debug logs are useful while iterating on the approach, but they are not part of the final answer.
+
+/*
+  Pseudocode algorithm for solving 3Sum:
+
+  1. Sort the input array.
+  2. Create an empty list called result.
+  3. Loop i from 0 to nums.length - 3:
+    - If i > 0 and nums[i] is the same as nums[i - 1], skip it to avoid duplicate triplets.
+    - Set left = i + 1.
+    - Set right = nums.length - 1.
+    - While left < right:
+      - Compute total = nums[i] + nums[left] + nums[right].
+      - If total === 0:
+        - Add [nums[i], nums[left], nums[right]] to result.
+        - Move left forward and right backward.
+        - Skip any duplicate values on both sides.
+      - If total < 0:
+        - Move left forward to increase the sum.
+      - If total > 0:
+        - Move right backward to decrease the sum.
+  4. Return result.
+*/
+
 var threeSum = function (nums = [-1, 0, 1, 2, -1, -4]) {
+  // 1. Sort the input array.
   nums.sort((a, b) => a - b);
-  console.log(nums);
 
-  let i = 0,
-    answer = [],
-    left = i + 1,
-    right = nums.length - 1;
+  // 2. Create an empty list called result.
+  let result = [];
 
-  while (left < right && i <= nums.length - 2) {
-    // Compare the current pair against the fixed value at nums[i].
-    const sum = nums[left] + nums[right],
-      diff = nums[i] - sum;
-
-    if (diff < 0) {
-      // The pair sum is too large, so move the search window inward.
-      if (left === right - 1) {
-        right--;
-        left = i + 1;
-      } else if (left + 1 === i) {
-        left += 2;
-      } else left++;
-    } else if (diff > 0) {
-      // The pair sum is too small, so move the right pointer left.
-      if (left === right - 1) {
-        left++;
-        right = nums.length - 1;
-      } else if (right - 1 === i) {
-        right -= 2;
-      } else right--;
-    } else if (diff === 0) {
-      // A matching triplet has been found.
-      answer.push([nums[i], left, right]);
+  // Loop i from 0 to nums.length - 2
+  for (let i = 0; i < nums.length - 2; i++) {
+    if (i > 0 && nums[i] === nums[i - 1]) {
+      i++;
+      continue;
     }
 
-    console.log("left: ", left, "right: ", right, "sum: ", sum, "diff: ", diff);
-
-    if (right === left && !answer.length) {
-      left = i;
-      i++;
+    let left = i + 1,
       right = nums.length - 1;
-      console.log(nums[i], left, right, i <= nums.length - 2);
+
+    while (left < right) {
+      let total = nums[i] + nums[left] + nums[right];
+
+      if (total === 0) {
+        result.push([nums[i], nums[left], nums[right]]);
+        left++;
+        right--;
+      } else if (total < 0) {
+        left++;
+      } else {
+        right--;
+      }
     }
   }
 
-  console.log(answer);
+  const uniqueResult = Array.from(
+    new Set(result.map((item) => JSON.stringify(item))),
+  ).map((item) => JSON.parse(item));
+
+  return uniqueResult;
 };
 
-threeSum();
+console.log(threeSum());
+console.log(
+  threeSum([2, -3, 0, -2, -5, -5, -4, 1, 2, -2, 2, 0, 2, -4, 5, 5, -10]),
+);
+console.log(threeSum([0, 0, 0]));
