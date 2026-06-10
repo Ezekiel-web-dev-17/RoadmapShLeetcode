@@ -42,34 +42,67 @@ Explanation: s is an empty string "" after removing non-alphanumeric characters.
 
 ## My Solution
 
-### Explanation (matches current `ValidPalindrome.js`)
+### Clean String + Two Pointers (Current Implementation)
 
-The implementation in `ValidPalindrome.js` performs these steps:
+How it works:
 
-1. Normalize the input string `s` by calling `s.toLowerCase()` and removing non-alphanumeric characters with `s.replace(/[^a-zA-Z0-9]/g, "")`. The resulting string is stored in `word`.
-2. Compute `half = Math.floor(word.length / 2)` to know how many pairwise comparisons are needed; comparing only up to the middle avoids redundant checks.
-3. Use a `for` loop with two indices: `i` starting at `0` and `j` starting at `word.length - 1`. After each iteration increment `i` and decrement `j`.
-4. On each iteration compare `word[i]` and `word[j]`. If any pair differs, return `false` immediately.
-5. If the loop completes without mismatches, return `true`.
+1. Normalise the string: `s.toLowerCase()` then strip non-alphanumeric chars with `.replace(/[^a-zA-Z0-9]/g, "")` into `word`
+2. Compute `half = Math.floor(word.length / 2)` — we only need to check up to the midpoint
+3. Loop with two indices `i` (from left) and `j` (from right), comparing `word[i]` vs `word[j]`
+4. If any pair mismatches, return `false` immediately
+5. If the loop completes with no mismatches, return `true`
 
-Key points about this implementation:
+**Complexity:**
 
-- The normalization step allocates a cleaned string, so space usage is `O(n)` where `n` is the length of the input (after cleaning).
-- The loop compares only half the characters (`half`), making the number of comparisons roughly `n/2`, but time complexity remains `O(n)`.
-- Using the regex `/[^a-zA-Z0-9]/g` ensures only ASCII alphanumeric characters remain; this matches typical LeetCode constraints.
+- **Time:** O(n) — one normalisation pass + up to n/2 comparisons
+- **Space:** O(n) — we build a new cleaned string
 
-**Time Complexity:** O(n) — normalization plus a single pass of pairwise comparisons.  
-**Space Complexity:** O(n) — for the normalized string.
+Why this works:
 
-### Suggested Alternative Solutions
+- A palindrome reads the same forwards and backwards, so comparing character `i` from the front against character `j` from the back is sufficient.
+- Normalising first keeps the comparison logic simple.
 
-- In-place two-pointer scan without building a cleaned string: iterate `left` and `right` over the original `s`, advancing them while skipping non-alphanumeric characters and comparing characters on the fly. This yields O(n) time and O(1) extra space.
-- Use `cleaned === cleaned.split("").reverse().join("")` after normalization for a concise approach. This is O(n) time but allocates extra arrays/strings; may be slightly slower in practice.
-- Replace the regex normalization with a manual character check (`isAlphaNum`) to avoid the cost of regex on very long strings or to support custom character rules.
-- For Unicode inputs, normalization requires care (case folding and Unicode-aware category tests). Consider using `Intl` or dedicated Unicode libraries if needed.
+---
 
-See `ValidPalindrome.js` for the exact code referenced above.
+## Alternative Approaches to Try
+
+### Approach 1: In-Place Two Pointers — No Extra String (Best - O(1) Space) ⭐
+
+Skip non-alphanumeric characters on the fly without building a cleaned string:
+
+1. Set `left = 0`, `right = s.length - 1`
+2. While `left < right`:
+   - Advance `left` while `s[left]` is not alphanumeric
+   - Decrement `right` while `s[right]` is not alphanumeric
+   - Compare `s[left].toLowerCase()` vs `s[right].toLowerCase()`; if different return `false`
+   - Increment `left`, decrement `right`
+3. Return `true`
+
+**Time:** O(n) | **Space:** O(1)  
+✅ _Most efficient — preferred in interviews_
+
+### Approach 2: Reverse and Compare (O(n) Space)
+
+1. Clean the string (lowercase + remove non-alphanumeric) into `cleaned`
+2. Return `cleaned === cleaned.split("").reverse().join("")`
+
+**Time:** O(n) | **Space:** O(n)  
+⚠️ _Simple one-liner but allocates extra arrays_
+
+### Approach 3: Manual Character Check (Avoid Regex)
+
+Replace the regex with a helper `isAlphaNum(c)` that checks char codes directly:
+
+1. `(c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9')`
+2. Use with in-place two pointers (Approach 1) for O(n) time, O(1) space
+
+**Time:** O(n) | **Space:** O(1)  
+_Useful when you want to avoid regex overhead or support custom character rules_
+
+## Similar Questions
+
+- [Valid Palindrome II](https://leetcode.com/problems/valid-palindrome-ii/) — Easy
 
 ## Implementation
 
-See `ValidPalindrome.js` for both the preserved high-O attempt (commented) and the preferred two-pointer solution with comments.
+See [ValidPalindrome.js](./ValidPalindrome.js) for the JavaScript implementation.
