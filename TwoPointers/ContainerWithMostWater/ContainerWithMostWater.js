@@ -9,9 +9,9 @@ var maxArea = function (height) {
     result = 0;
 
   while (left < right) {
-    const base = right - left,
-      totalHeight = height[left] < height[right] ? height[left] : height[right],
-      res = base * totalHeight;
+    const totalHeight =
+        height[left] < height[right] ? height[left] : height[right],
+      res = (right - left) * totalHeight;
 
     if (result < res) result = res;
 
