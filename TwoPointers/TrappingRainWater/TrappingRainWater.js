@@ -4,13 +4,15 @@
  */
 
 var trap = function (height = [0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1]) {
-  let total = 0,
-    left = 0,
-    right = 1;
+  let total = 0;
 
-  if (height[0] > height[height.length - 1]) height.reverse();
+  while (height.length) {
+    let left = 0,
+      right = 1;
 
-  while (left < right) {
+    // reverse hieghts if the first element is greater than the last element, so we can start from the left
+    if (height[0] > height[height.length - 1]) height.reverse();
+
     for (let i = left + 1; i < height.length; i++) {
       let max = height[left];
 
@@ -24,8 +26,6 @@ var trap = function (height = [0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1]) {
       }
     }
 
-    console.log(left, right);
-
     if (right - left > 1) {
       let diff = right - left,
         h = left > right ? height[right] : height[left],
@@ -38,8 +38,7 @@ var trap = function (height = [0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1]) {
       total += tot;
     }
 
-    left = right;
-    height.length - 1 > right ? right++ : right;
+    height = height.slice(right);
   }
 
   return total;
@@ -54,27 +53,3 @@ console.log(
     3,
   ]),
 ); // 83
-
-/*
-
-# 
-
-##
-# 
-
-# 
-###
-##
-# 
-##
-#
-
-
-// //////////////////////////////
-####
-##
-
-###
-##
-#####
-*/
