@@ -90,3 +90,9 @@ Store the visited numbers and their indices in a hash map. For each element, che
 ## Implementation
 
 See [TwoSumII.js](./TwoSumII.js) for the JavaScript implementation.
+
+## Similar Questions
+
+- [Two Sum](https://leetcode.com/problems/two-sum/) — Easy
+- [Two Sum IV - Input is a BST](https://leetcode.com/problems/two-sum-iv-input-is-a-bst/) — Easy
+- [Two Sum Less Than K](https://leetcode.com/problems/two-sum-less-than-k/) — Easy
