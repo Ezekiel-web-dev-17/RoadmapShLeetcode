@@ -6,31 +6,38 @@
 var trap = function (height = [0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1]) {
   let total = 0;
 
+  // Process the elevation map segment by segment
   while (height.length) {
     let left = 0,
       right = left + 1;
 
-    // reverse hieghts if the first element is greater than the last element, so we can start from the left
+    // Ensure we start from the lower end. If the left-most bar is taller
+    // than the right-most bar, reverse the array to process from the opposite end.
     if (height[0] > height[height.length - 1]) height.reverse();
 
+    // Find the next boundary bar to contain the water.
+    // Scan from the left pointer to find the first bar that is at least as tall.
     for (let i = left + 1; i < height.length; i++) {
       if (height[left] < height[i]) {
         right = i;
-        break;
-      } else if (height[left] === height[i]) right = i;
+        break; // Found a strictly taller bar, stop scanning
+      } else if (height[left] === height[i]) right = i; // Keep scanning but track the equal height bar
     }
 
     let diff = right - left;
 
+    // If there is space for water between the left and right boundaries
     if (diff > 1) {
       let h = left > right ? height[right] : height[left],
         tot = (diff - 1) * h;
 
-      for (i = 1; i < diff; i++) tot -= height[left + i];
+      // Subtract the space occupied by the intermediate bars
+      for (let i = 1; i < diff; i++) tot -= height[left + i];
 
       total += tot;
     }
 
+    // Advance to the next segment starting from the right boundary
     height = height.slice(right);
   }
 
