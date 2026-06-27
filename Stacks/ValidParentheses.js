@@ -3,24 +3,44 @@
  * @return {boolean}
  */
 var isValid = function (s = "()[]{}") {
-  let opens = ["{", "(", "["],
+  let open = ["[", "{", "("],
     map = {
-      "]": "[",
-      "}": "{",
-      ")": "(",
+      "[": "]",
+      "{": "}",
+      "(": ")",
     };
 
   let stack = s.split(""), // stack of characters.
     tmpStack = [];
 
-  for (let i = 0; i < s.length; i++) {
-    tmpStack.push(stack.pop());
+  stack = stack.map((stk) => {
+    if (open.includes(stk)) {
+      tmpStack.push(stk);
+    } else return stk;
+  });
+
+  // console.log("stack: ", stack, "tmpStack: ", tmpStack);
+
+  for (let i = stack.length - 1; i >= 0; i--) {
+    // console.log(
+    //   stack[i],
+    //   tmpStack[tmpStack.length - 1],
+    //   map[tmpStack[tmpStack.length - 1]],
+    //   map[tmpStack[tmpStack.length - 1]] === stack[i],
+    // );
     if (
-      map[tmpStack[tmpStack.length - 1]] === stack[stack.length - 1] ||
-      opens.includes(stack[stack.length - 1])
-    )
+      stack[i] !== undefined &&
+      map[tmpStack[tmpStack.length - 1]] === stack[i]
+    ) {
+      // console.log("first", stack);
+      stack[i] = undefined;
+      i = s.length;
+      // console.log("2nd", stack);
       tmpStack.pop();
+    }
   }
+
+  // console.log("stack: ", stack, "tmpStack: ", tmpStack);
 
   return tmpStack.length ? false : true;
 };
