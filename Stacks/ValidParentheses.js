@@ -3,41 +3,32 @@
  * @return {boolean}
  */
 var isValid = function (s = "()[]{}") {
-  let map = {
-    "(": ")",
-    "{": "}",
-    "[": "]",
-  };
+  let opens = ["{", "(", "["],
+    map = {
+      "]": "[",
+      "}": "{",
+      ")": "(",
+    };
 
-  if (s.length % 2 !== 0) {
-    return false;
-  }
+  let stack = s.split(""), // stack of characters.
+    tmpStack = [];
 
-  let stack = s.split(""),
-    tmpStack = [],
-    i = stack.length - 1;
+  for (let i = 0; i < s.length; i++) {
+    const char = s.charAt(i);
 
-  while (i > 1) {
-    tmpStack.push(stack[stack.length - 1]);
-    stack.pop();
-
-    if (map[stack[stack.length - 1]] === tmpStack[tmpStack.length - 1]) {
+    if (opens.includes(char)) {
+      // When you encounter an opening bracket, push it to the top of the stack.
+      stack = [...stack.filter((stc) => stc !== char)];
+      tmpStack.push(char);
+    } else if (tmpStack.length && map[char] === tmpStack[tmpStack.length - 1]) {
+      //   When you encounter a closing bracket, check if the top of the stack was the opening for it. If yes, pop it from the stack. Otherwise, return false.
+      stack = [...stack.filter((stc) => stc)];
       tmpStack.pop();
-      stack.pop();
+      console.log("tmpStack", tmpStack);
     }
-
-    i--;
   }
 
-  console.log(stack, tmpStack);
-  if (stack.length > 1) {
-    tmpStack.push(stack[stack.length - 1]);
-    stack.pop();
-  }
-
-  return map[stack[stack.length - 1]] === tmpStack[tmpStack.length - 1]
-    ? true
-    : false;
+  return tmpStack.length ? false : true;
 };
 
 console.log(isValid());
