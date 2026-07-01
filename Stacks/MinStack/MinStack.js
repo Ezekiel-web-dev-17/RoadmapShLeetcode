@@ -48,7 +48,7 @@ MinStack.prototype.getMin = function () {
  * var param_4 = obj.getMin()
  */
 
-minStack = new MinStack();
+const minStack = new MinStack();
 minStack.push(-2);
 minStack.push(0);
 minStack.push(-3);
