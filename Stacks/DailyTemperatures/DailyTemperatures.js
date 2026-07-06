@@ -5,36 +5,38 @@
 var dailyTemperatures = function (
   temperatures = [73, 74, 75, 71, 69, 72, 76, 73],
 ) {
-  let left = 0,
-    right = left + 1,
+  let ordered = [temperatures[0]],
     answer = [];
 
-  while (left < right && right <= temperatures.length - 1) {
-    if (temperatures[left] < temperatures[right]) {
-      answer[left] = right - left;
-      left++;
-      right = left + 1;
-    } else if (
-      right === temperatures.length - 1 &&
-      left < temperatures.length - 1
-    ) {
-      if (temperatures[left] < temperatures[right]) {
-        answer[left] = right - left;
-      } else answer[left] = 0;
-      left++;
-      right = left + 1;
-      continue;
-    } else right++;
+  for (let i = 1; i < temperatures.length; i++) {
+    if (ordered[ordered.length - 1] < temperatures[i]) {
+      ordered.push(temperatures[i]);
+    } else {
+      let j = ordered.length - 1;
+      while (j >= 0) {
+        if (ordered[j] <= temperatures[i]) {
+          ordered = [
+            ...ordered.slice(0, j + 1),
+            temperatures[i],
+            ...ordered.slice(j + 1),
+          ];
+
+          break;
+        } else if (j === 0) {
+          ordered = [temperatures[i], ...ordered.slice(0)];
+          break;
+        } else j--;
+      }
+    }
   }
 
-  answer.push(0);
-
-  return answer;
+  return ordered;
 };
 
 console.log(dailyTemperatures());
 console.log(dailyTemperatures([30, 40, 50, 60]));
 console.log(dailyTemperatures([30, 60, 90]));
+
 console.log(
   dailyTemperatures([
     99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99,
