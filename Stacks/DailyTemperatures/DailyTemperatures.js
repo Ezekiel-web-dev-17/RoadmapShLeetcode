@@ -5,29 +5,19 @@
 var dailyTemperatures = function (
   temperatures = [73, 74, 75, 71, 69, 72, 76, 73],
 ) {
-  let ordered = [temperatures[0]],
-    answer = [];
+  let ordered = new Array(temperatures.length).fill(0);
+  let stack = [];
 
-  for (let i = 1; i < temperatures.length; i++) {
-    if (ordered[ordered.length - 1] < temperatures[i]) {
-      ordered.push(temperatures[i]);
-    } else {
-      let j = ordered.length - 1;
-      while (j >= 0) {
-        if (ordered[j] <= temperatures[i]) {
-          ordered = [
-            ...ordered.slice(0, j + 1),
-            temperatures[i],
-            ...ordered.slice(j + 1),
-          ];
-
-          break;
-        } else if (j === 0) {
-          ordered = [temperatures[i], ...ordered.slice(0)];
-          break;
-        } else j--;
-      }
+  for (let i = 0; i < temperatures.length; i++) {
+    while (
+      stack.length &&
+      temperatures[i] > temperatures[stack[stack.length - 1]]
+    ) {
+      let prev_index = stack.pop();
+      ordered[prev_index] = i - prev_index;
     }
+
+    stack.push(i);
   }
 
   return ordered;
@@ -36,7 +26,6 @@ var dailyTemperatures = function (
 console.log(dailyTemperatures());
 console.log(dailyTemperatures([30, 40, 50, 60]));
 console.log(dailyTemperatures([30, 60, 90]));
-
 console.log(
   dailyTemperatures([
     99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99,
