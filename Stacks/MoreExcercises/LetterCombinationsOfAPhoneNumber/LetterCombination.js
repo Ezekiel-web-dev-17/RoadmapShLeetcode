@@ -2,7 +2,7 @@
  * @param {string} digits
  * @return {string[]}
  */
-var letterCombinations = function (digits = "23") {
+var letterCombinations = function (digits = "239") {
   const HASH = {
     2: "abc",
     3: "def",
@@ -18,24 +18,23 @@ var letterCombinations = function (digits = "23") {
     curr = [];
 
   function backtrack(i) {
-    if (curr === digits.length) {
+    if (curr.length === digits.length) {
+      result.push([...curr].join(""));
       return;
     }
 
-    for (let a = 0; a < HASH[digits[0]].length; a++) {
-      for (let c = 0; c < HASH[digits[i]].length; c++) {
-        curr.push(HASH[digits[0]][a], HASH[digits[i]][c]);
-        result.push([...curr].join(""));
-        curr = [];
-      }
+    const letters = HASH[digits[i]];
+    for (const letter of letters) {
+      curr.push(letter);
+      backtrack(i + 1);
+      curr.pop();
     }
-
-    backtrack(i + 1);
   }
 
-  backtrack(1);
+  backtrack(0);
 
   return result;
 };
 
+console.log(letterCombinations());
 console.log(letterCombinations("2"));
