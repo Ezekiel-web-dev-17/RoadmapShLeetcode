@@ -23,12 +23,12 @@ var largestRectangleArea = function (heights = [2, 1, 5, 6, 2, 3]) {
   }
 
   function recursion(curr, index, direction = -1) {
-    if (index === 0 && direction === -1) return index;
-    else if (index === heights.length - 1) return heights.length;
+    if (index === 0 && direction === -1) return heights[0] >= curr ? 0 : 1;  // include index 0 only if it's tall enough
+    else if (index === heights.length - 1 && direction === +1) return heights[index] >= curr ? heights.length : index;
 
     if (heights[index] >= curr)
       return recursion(curr, (index += direction), direction);
-    else return index;
+    else return direction === -1 ? index + 1 : index;
   }
 
   stack.forEach((area) => {
@@ -41,6 +41,7 @@ var largestRectangleArea = function (heights = [2, 1, 5, 6, 2, 3]) {
 };
 
 console.log(largestRectangleArea());
+console.log(largestRectangleArea([4, 2, 0, 3, 2, 5]));
 console.log(largestRectangleArea([3, 6, 5, 7, 4, 8, 1, 0]));
 console.log(largestRectangleArea([1, 1]));
 console.log(largestRectangleArea([2, 1, 2]));
