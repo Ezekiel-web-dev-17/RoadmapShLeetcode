@@ -2,51 +2,69 @@
  * @param {number[]} heights
  * @return {number}
  */
+// var largestRectangleArea = function (heights = [2, 1, 5, 6, 2, 3]) {
+//   let stack = [], area = 0, stackLastIn = 0;
+
+//   for (let i = 0; i < heights.length; i++) {
+//     let rectArea = 0, len = i + 1, high = stack[stackLastIn] ?? heights[i];
+
+//     if (heights[i] !== high) {
+//       stackLastIn = i;
+//       high = heights[i];
+
+//       if (high > heights[i]) {
+//         len = len - stackLastIn;
+//       }
+//     }
+
+//     rectArea = len * high;
+//     area = Math.max(area, rectArea);
+//     stack.push(heights[i])
+//   }
+// };
+
+//    #
+//   ##
+//   ##
+//   ## #
+// # ####
+// ######
+// console.log(largestRectangleArea());
+// console.log(largestRectangleArea([4, 2, 0, 3, 2, 5]));
+// console.log(largestRectangleArea([3, 6, 5, 7, 4, 8, 1, 0]));
+// console.log(largestRectangleArea([1, 1]));
+// console.log(largestRectangleArea([2, 1, 2]));
+// console.log(largestRectangleArea([0, 9]));
+// console.log(largestRectangleArea([1]));
+// console.log(largestRectangleArea([2, 4]));
+// console.log(largestRectangleArea([1, 2, 2]));
+// console.log(largestRectangleArea([1, 2, 3, 4, 5]));
+
+// Game method
+// height scan like tetris.
+
 var largestRectangleArea = function (heights = [2, 1, 5, 6, 2, 3]) {
-  let stack = [[0, heights[0], 0, recursion(heights[0], 0, +1)]],
-    max = 0;
+  let points = 0, maxHeight = 0, maxArea = 0, rectangles = [];
 
-  for (let i = 1; i < heights.length; i++) {
-    let startIndex = i;
-    if (heights[i] < stack[stack.length - 1][1]) {
-      // pop the outermost value and it's index from the stack storing the area if greater than max
-      let popped = stack.pop(),
-        poppedArea = popped[1] * (popped[2] - popped[0] + 1);
+  heights.forEach((h) => maxHeight < h ? maxHeight = h : maxHeight);
 
-      max = Math.max(poppedArea, max);
+  while (points < maxHeight) {
+    points += 1;
 
-      // recursively check if currHieght has a value less than it to the back setting the start index to the value before the lesser height or 0 if no lesser height.
-      startIndex = recursion(heights[i], i);
+    for (let i = 0; i < heights.length; i++) {
+      let curr_height = heights[i], rects = [points];
+      if (heights[i] > 0 && (heights[i - 1] === 0 || heights[i + 1] === 0)) rects.push(i, i + 1);
+
+      if (heights[i] >= 1) {
+        heights[i] = curr_height - 1;
+      }
+
+      rectangles.push(rects);
     }
 
-    stack.push([startIndex, heights[i], i, recursion(heights[i], i, +1)]);
+    console.log("\nAt", points, "Points:\n", rectangles, "\nHeights\n", heights);
   }
 
-  function recursion(curr, index, direction = -1) {
-    if (index === 0 && direction === -1) return heights[0] >= curr ? 0 : 1;  // include index 0 only if it's tall enough
-    else if (index === heights.length - 1 && direction === +1) return heights[index] >= curr ? heights.length : index;
-
-    if (heights[index] >= curr)
-      return recursion(curr, (index += direction), direction);
-    else return direction === -1 ? index + 1 : index;
-  }
-
-  stack.forEach((area) => {
-    let width = area[3] - area[0];
-    console.log(width * area[1], area);
-    max = Math.max(max, width * area[1]);
-  });
-
-  return max;
-};
-
+  return rectangles;
+}
 console.log(largestRectangleArea());
-console.log(largestRectangleArea([4, 2, 0, 3, 2, 5]));
-console.log(largestRectangleArea([3, 6, 5, 7, 4, 8, 1, 0]));
-console.log(largestRectangleArea([1, 1]));
-console.log(largestRectangleArea([2, 1, 2]));
-console.log(largestRectangleArea([0, 9]));
-console.log(largestRectangleArea([1]));
-console.log(largestRectangleArea([2, 4]));
-console.log(largestRectangleArea([1, 2, 2]));
-console.log(largestRectangleArea([1, 2, 3, 4, 5]));
