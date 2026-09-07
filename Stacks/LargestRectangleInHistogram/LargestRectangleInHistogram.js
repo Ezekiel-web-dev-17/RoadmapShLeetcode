@@ -49,20 +49,22 @@ var largestRectangleArea = function (heights = [2, 1, 5, 6, 2, 3]) {
   heights.forEach((h) => maxHeight < h ? maxHeight = h : maxHeight);
 
   while (points < maxHeight) {
+    let hClone = [...heights]
     points += 1;
 
-    for (let i = 0; i < heights.length; i++) {
-      let curr_height = heights[i], rects = [points];
-      if (heights[i] > 0 && (heights[i - 1] === 0 || heights[i + 1] === 0)) rects.push(i, i + 1);
+    for (let i = 0; i < hClone.length; i++) {
+      let curr_height = hClone[i], rects = [points];
+      if (hClone[i] > 0 && (heights[i - 1] === 0 || heights[i + 1] === 0)) rects.push(i, i + 1);
 
-      if (heights[i] >= 1) {
-        heights[i] = curr_height - 1;
+      if (hClone[i] >= 1) {
+        hClone[i] = curr_height - 1;
       }
 
       rectangles.push(rects);
     }
 
-    console.log("\nAt", points, "Points:\n", rectangles, "\nHeights\n", heights);
+    console.log("\nAt", points, "Points:\n", rectangles, "\nHeights\n", heights, "\nHClones\n", hClone);
+    heights = [...hClone]
   }
 
   return rectangles;
