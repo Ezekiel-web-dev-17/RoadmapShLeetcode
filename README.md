@@ -75,6 +75,36 @@ Input: ((nums = [2, 7, 11, 15]), (target = 9));
 Output: [0, 1];
 ```
 
+### Binary Search
+
+#### [Search in Rotated Sorted Array](BinarySearch/SearchInRotatedSortedArray/SearchInRotatedSortedArray.md)
+
+- **Difficulty:** Medium
+- **Description:** Find the index of a target value in an ascending integer array rotated at an unknown pivot.
+- **Time Complexity:** O(n) (Current) / O(log n) (Optimal)
+- **Space Complexity:** O(1)
+
+**Example:**
+
+```javascript
+Input: nums = [4, 5, 6, 7, 0, 1, 2], target = 0
+Output: 4
+```
+
+#### [Binary Search](BinarySearch/BinarySearch/BinarySearch.md)
+
+- **Difficulty:** Easy
+- **Description:** Search for a target value in a sorted integer array using logarithmic time complexity.
+- **Time Complexity:** O(log n)
+- **Space Complexity:** O(1)
+
+**Example:**
+
+```javascript
+Input: nums = [-1, 0, 3, 5, 9, 12], target = 9
+Output: 4
+```
+
 ## Requirements
 
 - Node.js v12 or higher
