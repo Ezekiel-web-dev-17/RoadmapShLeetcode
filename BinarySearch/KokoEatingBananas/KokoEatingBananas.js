@@ -9,7 +9,7 @@ var minEatingSpeed = function (piles = [3, 6, 7, 11], h = 8) {
 
     while (left <= right) {
         mid = left + Math.floor((right - left) / 2);
-        total = calculator(mid, piles[mid]);
+        total = calculator(piles[mid]);
 
         console.log("Mid:", mid, "Total:", total);
 
@@ -20,15 +20,15 @@ var minEatingSpeed = function (piles = [3, 6, 7, 11], h = 8) {
         tries.push(total);
     }
 
-    function calculator(val, divisor) {
+    function calculator(val) {
         let tots = 0;
 
         for (let i = 0; i < piles.length; i++) {
-            tots += Math.ceil(piles[i] / divisor);
-            console.log("Tots:", tots, "Pile:", piles[i], "Value Pile:", divisor, "ValIndex:", val, "i:", i, "curr_eats:", Math.ceil(piles[i] / divisor))
+            tots += Math.ceil(piles[i]);
+            console.log("Tots:", tots, "Pile:", piles[i], "Value Pile:", "ValIndex:", val, "i:", i, "curr_eats:", Math.ceil(piles[i]))
         };
 
-        return [tots, divisor];
+        return [tots];
     }
 
     console.log(tries, tries[tries.length - 1][0] > h && tries[tries.length - 2][0] < h)
@@ -43,6 +43,17 @@ var minEatingSpeed = function (piles = [3, 6, 7, 11], h = 8) {
     //         } else continue
     //     }
     // }
+
+    for (let j = tries.length; j < 0; j--) {
+        while (tries[j][1] > tries[j - 1][1]) {
+            const newTotal = calculator(j);
+            console.log(j, newTotal)
+
+            if (newTotal[0] === h) {
+                return newTotal[1];
+            } else continue
+        }
+    }
 
     return total[0];
 };
