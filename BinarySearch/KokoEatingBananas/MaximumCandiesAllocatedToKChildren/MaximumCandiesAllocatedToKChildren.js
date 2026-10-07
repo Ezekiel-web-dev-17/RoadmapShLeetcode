@@ -6,7 +6,7 @@
 var maximumCandies = function (candies = [5, 8, 6], k = 3) {
     let left = 0, right = Math.max(...candies), mid = 0, res = 0;
 
-    while (left < right) {
+    while (left <= right) {
         mid = left + Math.floor((right - left) / 2);
 
         let forAll = distribute(mid)
@@ -17,31 +17,24 @@ var maximumCandies = function (candies = [5, 8, 6], k = 3) {
     }
 
     function distribute(trial) {
-        console.log("trial: ", trial)
-        if (!trial) {
-            return false
+        let children = k;
+
+        for (let candy = 0; candy < candies.length; candy++) {
+            let i = candies[candy];
+            console.log("curr pile:", i, "children:", children, "trial:", trial, "on idx:", candy)
+            children -= Math.floor(i / trial);
         }
 
-        let candiesCopy = [...candies], childrenCount = k;
-
-        for (let i = 0; i < candiesCopy.length; i++) {
-            if (trial < candiesCopy[i]) {
-                let diff = candiesCopy[i] - trial;
-                candiesCopy[i] = trial;
-                candiesCopy.push(diff)
-            }
-        }
-
-        let equalToTrial = candiesCopy.filter((candy) => candy === trial).reduce((acc, curr) => { return acc += curr }, 0);
-
-        return Math.floor(equalToTrial / trial) >= childrenCount;
+        return children <= 0;
     }
 
     return res;
 };
 
-console.log(maximumCandies())
-console.log(maximumCandies([2, 5], 11))
-console.log(maximumCandies([4, 7, 5], 4))
-console.log(maximumCandies([4, 7, 5], 16))
-console.log(maximumCandies([5, 8, 6], 3)) // 5
+console.log("\nAnswer is: ", maximumCandies(), "\n")
+console.log("\nAnswer is: ", maximumCandies([2, 5], 11), "\n")
+console.log("\nAnswer is: ", maximumCandies([4, 7, 5], 4), "\n")
+console.log("\nAnswer is: ", maximumCandies([4, 7, 5], 16), "\n")
+console.log("\nAnswer is: ", maximumCandies([5, 8, 6], 3), "\n") // 5
+console.log("\nAnswer is: ", maximumCandies([1], 1), "\n")
+console.log("\nAnswer is: ", maximumCandies([10000000], 1000000000000), "\n")
